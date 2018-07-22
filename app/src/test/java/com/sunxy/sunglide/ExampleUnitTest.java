@@ -14,4 +14,17 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+
+    @Test
+    public void getHashCode(){
+        String str = "abc";
+        System.out.println(str.hashCode());
+        String a = "ab";
+        a+="c";
+        System.out.println(a.hashCode() + ", " + (str.hashCode() == a.hashCode()));
+    }
+
+
+
 }

@@ -32,7 +32,7 @@ public class GlideBuilder {
     }
 
 
-    private Glide build(Context context){
+    public Glide build(Context context){
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         int maxSize = getMaxSize(activityManager);
 

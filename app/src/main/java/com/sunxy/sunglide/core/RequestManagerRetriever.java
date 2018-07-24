@@ -25,10 +25,12 @@ public class RequestManagerRetriever implements android.os.Handler.Callback{
     public static final String FRAG_TAG = "glide_fragment";
     private final static int REMOvE_SUPPORT_FRAGMENT = -1;
     private RequestManager applicationRequestManager;
+    private final GlideContext glideContext;
     private Handler handler;
     private Map<FragmentManager, SupportRequestManagerFragment> supports = new HashMap<>();
 
-    public RequestManagerRetriever() {
+    public RequestManagerRetriever(GlideContext glideContext) {
+        this.glideContext = glideContext;
         handler = new Handler(Looper.myLooper(), this);
     }
 
@@ -37,7 +39,7 @@ public class RequestManagerRetriever implements android.os.Handler.Callback{
      */
     private RequestManager getApplicationManager(){
         if (null == applicationRequestManager){
-            applicationRequestManager = new RequestManager(new ApplicationLifecycle());
+            applicationRequestManager = new RequestManager(glideContext, new ApplicationLifecycle());
         }
         return applicationRequestManager;
     }
@@ -60,7 +62,7 @@ public class RequestManagerRetriever implements android.os.Handler.Callback{
         SupportRequestManagerFragment fragment = getSupportRequestManagerFragment(fm);
         RequestManager requestManager = fragment.getRequestManager();
         if (null == requestManager){
-            requestManager = new RequestManager(fragment.getGlideLifecycle());
+            requestManager = new RequestManager(glideContext, fragment.getGlideLifecycle());
             fragment.setRequestManager(requestManager);
         }
         return requestManager;

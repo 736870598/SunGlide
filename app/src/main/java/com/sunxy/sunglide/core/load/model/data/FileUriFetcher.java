@@ -45,4 +45,9 @@ public class FileUriFetcher implements DataFetcher<InputStream> {
     public void cancel() {
 
     }
+
+    @Override
+    public Class<InputStream> getDataClass() {
+        return InputStream.class;
+    }
 }

@@ -24,7 +24,7 @@ public class ActivityFragmentLifecycle implements Lifecycle{
     public void addListener(LifecycleListener lifecycleListener) {
         lifecycleListeners.add(lifecycleListener);
         if (isDestoryed){
-            lifecycleListener.onDestory();
+            lifecycleListener.onDestroy();
         }else if(isStarted){
             lifecycleListener.onStart();
         }else{
@@ -54,7 +54,7 @@ public class ActivityFragmentLifecycle implements Lifecycle{
     void onDestroy(){
         isDestoryed = true;
         for (LifecycleListener lifecycleListener : lifecycleListeners) {
-            lifecycleListener.onDestory();
+            lifecycleListener.onDestroy();
         }
     }
 }

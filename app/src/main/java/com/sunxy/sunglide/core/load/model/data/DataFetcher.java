@@ -24,4 +24,5 @@ public interface DataFetcher<Data> {
 
     void cancel();
 
+    Class<?> getDataClass();
 }

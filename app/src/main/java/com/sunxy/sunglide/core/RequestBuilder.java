@@ -1,8 +1,12 @@
 package com.sunxy.sunglide.core;
 
-import com.sunxy.sunglide.core.request.Request;
+import android.widget.ImageView;
 
-import javax.swing.text.html.ImageView;
+import com.sunxy.sunglide.core.request.Request;
+import com.sunxy.sunglide.core.request.RequestOptions;
+
+import java.io.File;
+
 
 /**
  * -
@@ -11,15 +15,29 @@ import javax.swing.text.html.ImageView;
  */
 public class RequestBuilder {
 
+    private final GlideContext glideContext;
+    private RequestOptions requestOptions;
     private RequestManager requestManager;
     private Object model;
 
-    public RequestBuilder(RequestManager requestManager){
+    public RequestBuilder(GlideContext glideContext, RequestManager requestManager) {
+        this.glideContext = glideContext;
         this.requestManager = requestManager;
+        this.requestOptions = glideContext.defaultRequestOptions;
     }
 
-    public RequestBuilder load(String str){
-        model = str;
+    public RequestBuilder apply(RequestOptions requestOptions) {
+        this.requestOptions = requestOptions;
+        return this;
+    }
+
+    public RequestBuilder load(String string) {
+        model = string;
+        return this;
+    }
+
+    public RequestBuilder load(File file) {
+        model = file;
         return this;
     }
 
@@ -29,8 +47,8 @@ public class RequestBuilder {
     public void into(ImageView view){
         //将View交给Target
         Target target = new Target(view);
-        //图片加载宇设置
-        Request request = new Request(model, target);
+        //图片加载设置
+        Request request = new Request(glideContext,requestOptions, model, target);
         //request交给requestManager管理
         requestManager.track(request);
 

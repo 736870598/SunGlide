@@ -1,11 +1,23 @@
 package com.sunxy.sunglide.core;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 
 import com.sunxy.sunglide.core.cache.ArrayPool;
 import com.sunxy.sunglide.core.cache.MemoryCache;
 import com.sunxy.sunglide.core.cache.recycle.BitmapPool;
+import com.sunxy.sunglide.core.load.Engine;
+import com.sunxy.sunglide.core.load.codec.StreamBitmapDecoder;
+import com.sunxy.sunglide.core.load.model.FileLoader;
+import com.sunxy.sunglide.core.load.model.FileUriLoader;
+import com.sunxy.sunglide.core.load.model.HttpUriLoader;
+import com.sunxy.sunglide.core.load.model.StringModelLoader;
+import com.sunxy.sunglide.core.request.RequestOptions;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * --
@@ -22,11 +34,28 @@ public class Glide {
 
     private static Glide glide;
 
+    private final Engine engine;
+    private final GlideContext glideContext;
+
     public Glide(Context context, GlideBuilder builder) {
-        requestManagerRetriever = new RequestManagerRetriever();
         memoryCache = builder.getMemoryCache();
         bitmapPool = builder.getBitmapPool();
         arrayPool = builder.getArrayPool();
+
+        //注册机
+        Registry registry = new Registry();
+        ContentResolver contentResolver = context.getContentResolver();
+        registry.add(String.class, InputStream.class, new StringModelLoader.Factory())
+                .add(Uri.class, InputStream.class, new HttpUriLoader.Factory())
+                .add(Uri.class, InputStream.class, new FileUriLoader.Factory(contentResolver))
+                .add(File.class, InputStream.class, new FileLoader.Factory())
+                .register(InputStream.class, new StreamBitmapDecoder(bitmapPool, arrayPool));
+
+        engine = builder.getEngine();
+        glideContext = new GlideContext(context, new RequestOptions(),
+                engine, registry);
+
+        requestManagerRetriever = new RequestManagerRetriever(glideContext);
     }
 
     private static Glide get(Context context){

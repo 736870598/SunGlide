@@ -4,14 +4,18 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import com.sunxy.sunglide.core.cache.ArrayPool;
+import com.sunxy.sunglide.core.cache.LruArrayPool;
 import com.sunxy.sunglide.core.cache.LruMemoryCache;
 import com.sunxy.sunglide.core.cache.MemoryCache;
 import com.sunxy.sunglide.core.cache.recycle.BitmapPool;
 import com.sunxy.sunglide.core.cache.recycle.DiskCache;
 import com.sunxy.sunglide.core.cache.recycle.DiskLruCacheWrapper;
 import com.sunxy.sunglide.core.cache.recycle.LruBitmapPool;
+import com.sunxy.sunglide.core.load.Engine;
+import com.sunxy.sunglide.core.load.GlideExecutor;
+
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * -
@@ -24,6 +28,8 @@ public class GlideBuilder {
     private DiskCache diskCache;
     private BitmapPool bitmapPool;
     private ArrayPool arrayPool;
+    private ThreadPoolExecutor executor;
+    private Engine engine;
 
     private static int getMaxSize(ActivityManager activityManager){
         //将最大可用内从的0.4倍作为缓存使用
@@ -35,6 +41,9 @@ public class GlideBuilder {
     public Glide build(Context context){
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         int maxSize = getMaxSize(activityManager);
+        if (null == arrayPool){
+            arrayPool = new LruArrayPool();
+        }
 
         //获取缓存可用的大小
         int availableSize = maxSize-arrayPool.getMaxSize();
@@ -64,12 +73,19 @@ public class GlideBuilder {
         }
 
         if (memoryCache == null){
-            memoryCache = new LruMemoryCache((int) BitmapPoolSize);
+            memoryCache = new LruMemoryCache((int) memoryCacheSize);
         }
 
         if (null == diskCache) {
             diskCache = new DiskLruCacheWrapper(context);
         }
+
+        if (executor == null) {
+            executor = GlideExecutor.newExecutor();
+        }
+
+        engine = new Engine(memoryCache, diskCache, bitmapPool, executor);
+        memoryCache.setResourceRemovedListener(engine);
         return new Glide(context, this);
 
     }
@@ -104,5 +120,21 @@ public class GlideBuilder {
 
     public void setArrayPool(ArrayPool arrayPool) {
         this.arrayPool = arrayPool;
+    }
+
+    public ThreadPoolExecutor getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(ThreadPoolExecutor executor) {
+        this.executor = executor;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 }

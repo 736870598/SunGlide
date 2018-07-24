@@ -13,13 +13,15 @@ import com.sunxy.sunglide.core.request.Request;
 public class RequestManager implements LifecycleListener{
 
     private final Lifecycle lifecycle;
+    private final GlideContext glideContext;
     RequestTrack requestTrack;
 
 
-    public RequestManager(Lifecycle lifecycle){
+    public RequestManager(GlideContext glideContext, Lifecycle lifecycle){
+        this.glideContext = glideContext;
         this.lifecycle = lifecycle;
-        lifecycle.addListener(this);
         requestTrack = new RequestTrack();
+        lifecycle.addListener(this);
     }
 
     @Override
@@ -51,6 +53,6 @@ public class RequestManager implements LifecycleListener{
     }
 
     public RequestBuilder load(String str){
-        return new RequestBuilder(this).load(str);
+        return new RequestBuilder(glideContext, this).load(str);
     }
 }

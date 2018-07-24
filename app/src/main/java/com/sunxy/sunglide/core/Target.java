@@ -11,12 +11,9 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import com.sunxy.sunglide.core.request.Request;
 
 import java.lang.ref.WeakReference;
-
-import jdk.nashorn.api.scripting.AbstractJSObject;
 
 /**
  * -

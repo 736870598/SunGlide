@@ -1,5 +1,6 @@
 package com.sunxy.sunglide.core;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -74,12 +75,15 @@ public class Glide {
      */
     private static void init(Context context, GlideBuilder glideBuilder) {
         Context applicationContext = context.getApplicationContext();
-        Glide glide = glideBuilder.build(applicationContext);
-        Glide.glide = glide;
+        Glide.glide = glideBuilder.build(applicationContext);
     }
 
 
     public static RequestManager with(FragmentActivity activity) {
+        return Glide.get(activity).requestManagerRetriever.get(activity);
+    }
+
+    public static RequestManager with(Activity activity) {
         return Glide.get(activity).requestManagerRetriever.get(activity);
     }
 }

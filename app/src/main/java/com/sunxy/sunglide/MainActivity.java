@@ -1,5 +1,6 @@
 package com.sunxy.sunglide;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -7,7 +8,7 @@ import android.widget.ImageView;
 import com.sunxy.sunglide.core.Glide;
 import com.sunxy.sunglide.core.request.RequestOptions;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

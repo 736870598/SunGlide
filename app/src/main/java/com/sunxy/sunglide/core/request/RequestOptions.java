@@ -18,7 +18,7 @@ public class RequestOptions {
     }
 
     public RequestOptions error(int resourceId){
-        this.errorId = errorId;
+        this.errorId = resourceId;
         return this;
     }
 

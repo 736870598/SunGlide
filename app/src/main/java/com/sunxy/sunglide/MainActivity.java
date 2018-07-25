@@ -1,8 +1,10 @@
 package com.sunxy.sunglide;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.sunxy.sunglide.core.Glide;
@@ -25,6 +27,13 @@ public class MainActivity extends Activity {
 //                        .override(1500, 1500)
  )
                 .into(iv);
+
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), SecondActivity.class));
+            }
+        });
 
 
     }

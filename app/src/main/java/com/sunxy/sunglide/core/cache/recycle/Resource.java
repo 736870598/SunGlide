@@ -1,6 +1,7 @@
 package com.sunxy.sunglide.core.cache.recycle;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.sunxy.sunglide.core.cache.Key;
 
@@ -47,11 +48,21 @@ public class Resource {
             throw new IllegalStateException("Cannot acquire a recycled resource");
         }
         ++acquired;
+        Log.v("sunxy---", toString());
     }
 
     public void release(){
         if (--acquired == 0){
             listener.onResourceReleased(key,this);
         }
+        Log.v("sunxy---", toString());
+    }
+
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "acquired=" + acquired +
+                ", key=" + key +
+                '}';
     }
 }

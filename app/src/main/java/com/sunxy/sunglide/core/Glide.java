@@ -70,9 +70,6 @@ public class Glide {
         return glide;
     }
 
-    /**
-     * 使用者可以定制自己的 GlideBuilder
-     */
     private static void init(Context context, GlideBuilder glideBuilder) {
         Context applicationContext = context.getApplicationContext();
         Glide.glide = glideBuilder.build(applicationContext);
@@ -85,5 +82,9 @@ public class Glide {
 
     public static RequestManager with(Activity activity) {
         return Glide.get(activity).requestManagerRetriever.get(activity);
+    }
+
+    public static RequestManager with(Context context) {
+        return Glide.get(context).requestManagerRetriever.get(context);
     }
 }

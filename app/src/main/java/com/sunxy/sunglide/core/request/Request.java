@@ -2,6 +2,7 @@ package com.sunxy.sunglide.core.request;
 
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 
 import com.sunxy.sunglide.core.GlideContext;
 import com.sunxy.sunglide.core.Target;
